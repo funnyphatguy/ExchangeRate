@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValCurs Date="01.08.2026" name="Foreign Currency Market">
+    <Valute ID="R01235">
+        <NumCode>840</NumCode>
+        <CharCode>USD</CharCode>
+        <Nominal>1</Nominal>
+        <Name>Доллар США</Name>
+        <Value>79,4637</Value>
+        <VunitRate>79,4637</VunitRate>
+    </Valute>
+    <Valute ID="R01820">
+        <NumCode>392</NumCode>
+        <CharCode>JPY</CharCode>
+        <Nominal>100</Nominal>
+        <Name>Иен</Name>
+        <Value>49,4669</Value>
+        <VunitRate>0,494669</VunitRate>
+    </Valute>
+</ValCurs>
