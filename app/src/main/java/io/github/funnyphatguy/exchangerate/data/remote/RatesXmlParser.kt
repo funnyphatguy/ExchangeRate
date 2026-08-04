@@ -8,8 +8,9 @@ import java.io.InputStream
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class RatesXmlParser {
+class RatesXmlParser @Inject constructor() {
 
     private fun readCurrency(parser: XmlPullParser): CurrencyDto {
         val id = requireNotNull(parser.getAttributeValue(null, "ID"))
