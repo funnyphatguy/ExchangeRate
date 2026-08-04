@@ -25,6 +25,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.funnyphatguy.exchangerate.common.withoutMillis
 import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
+import io.github.funnyphatguy.exchangerate.domain.model.Currency
 import io.github.funnyphatguy.exchangerate.ui.components.CurrencyCard
 
 @Composable
@@ -37,7 +38,8 @@ fun RatesScreen(
     RatesScreenContent(
         uiState = uiState,
         onRefresh = viewModel::loadRates,
-        modifier = modifier,
+        onFavoritePress = viewModel::toggleFavorites,
+        modifier = modifier
     )
 }
 
@@ -46,6 +48,7 @@ fun RatesScreen(
 private fun RatesScreenContent(
     uiState: RatesUiState,
     onRefresh: () -> Unit,
+    onFavoritePress: (Currency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val isRefreshing =
@@ -71,7 +74,9 @@ private fun RatesScreenContent(
             is RatesUiState.Success -> {
                 RatesContent(
                     snapshot = uiState.snapshot,
-                    lastLoadedTime = uiState.lastLoadedTime.withoutMillis()
+                    favorites = uiState.favorites,
+                    lastLoadedTime = uiState.lastLoadedTime.withoutMillis(),
+                    onFavoritePress = onFavoritePress
                 )
             }
         }
@@ -93,24 +98,16 @@ private fun LoadingContent(
 @Composable
 private fun ErrorContent(
     message: String,
-    modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        item {
-            Text(text = message)
-        }
-    }
+    Text(text = message, textAlign = TextAlign.Center)
 }
 
 @Composable
 private fun RatesContent(
     snapshot: CurrenciesSnapshot,
+    favorites: Set<String>,
     lastLoadedTime: String?,
+    onFavoritePress: (Currency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -150,8 +147,8 @@ private fun RatesContent(
             ) { currency ->
                 CurrencyCard(
                     currency = currency,
-                    isFavorite = false,
-                    onFavoriteClick = {},
+                    isFavorite = currency.code in favorites,
+                    onFavoriteClick = onFavoritePress,
                 )
             }
         }
