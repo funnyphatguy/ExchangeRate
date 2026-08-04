@@ -8,14 +8,13 @@ import io.github.funnyphatguy.exchangerate.data.repository.CurrencyRepositoryImp
 import io.github.funnyphatguy.exchangerate.domain.repository.CurrencyRepository
 import javax.inject.Singleton
 
-class RepositoryModule {
-    @Module
-    @InstallIn(SingletonComponent::class)
-    abstract class RepositoryModule {
-        @Binds
-        @Singleton
-        abstract fun provideRepositry(
-            repository: CurrencyRepositoryImpl
-        ): CurrencyRepository
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun provideRepository(
+        currencyRepository: CurrencyRepositoryImpl,
+    ): CurrencyRepository
 }

@@ -6,12 +6,11 @@ import io.github.funnyphatguy.exchangerate.domain.repository.CurrencyRepository
 import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(
-    private val remoteDataSource: RatesRemoteDataSource,
-    private val mapper: CurrencyMapper
+    private val remoteDataSource: RatesRemoteDataSource
 ) : CurrencyRepository {
     override suspend fun getCurrencies(): CurrenciesSnapshot {
         val response = remoteDataSource.loadRates()
-        return mapper.mapFromDto(response)
+        return CurrencyMapper.currenciesResponseToDomain(response)
     }
 
 
