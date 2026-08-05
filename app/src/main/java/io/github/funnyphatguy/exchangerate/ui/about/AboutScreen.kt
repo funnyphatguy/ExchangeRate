@@ -34,17 +34,7 @@ import io.github.funnyphatguy.exchangerate.R
 private const val GITHUB_PROFILE = "https://github.com/funnyphatguy"
 
 @Composable
-fun AboutScreen(
-) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        AboutContent()
-    }
-}
-
-@Composable
-fun AboutContent() {
+fun AboutScreen() {
 
     val uriHandler = LocalUriHandler.current
 
@@ -79,9 +69,7 @@ fun AboutContent() {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(200.dp)
-                .clip(
-                    CircleShape
-                ),
+                .clip(CircleShape),
             contentDescription = "Фотография разработчика"
         )
 

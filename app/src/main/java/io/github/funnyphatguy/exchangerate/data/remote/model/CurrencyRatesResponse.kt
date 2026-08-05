@@ -2,8 +2,7 @@ package io.github.funnyphatguy.exchangerate.data.remote.model
 
 import java.time.LocalDate
 
-data class CurrenciesResponse(
+data class CurrencyRatesResponse(
     val date: LocalDate,
-    val currencies: List<CurrencyDto>
-) {
-}
+    val currencies: List<CurrencyResponse>
+)

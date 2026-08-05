@@ -47,10 +47,8 @@ fun BottomNavigationBar(
                     },
                     alwaysShowLabel = true,
                     colors = NavigationBarItemDefaults.colors(
-                        selectedTextColor =
-                            MaterialTheme.colorScheme.primary,
-                        unselectedTextColor =
-                            MaterialTheme.colorScheme.onSurfaceVariant,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         indicatorColor = Color.Transparent,
                     ),
                 )

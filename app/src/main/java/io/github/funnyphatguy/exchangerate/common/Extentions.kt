@@ -4,11 +4,9 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun LocalTime.withoutMillis(): String {
-    val outputFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
-    return try {
+private const val TIME_PATTERN = "HH:mm"
+
+fun LocalTime.withoutMillis(): String = runCatching {
+    val outputFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN, Locale.getDefault())
         format(outputFormatter)
-    } catch (e: Exception) {
-        "N/A"
-    }
-}
+}.getOrNull() ?: "N/A"
