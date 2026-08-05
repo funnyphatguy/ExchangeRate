@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.funnyphatguy.exchangerate.presentation.navigation.ExchangeRateApp
+import io.github.funnyphatguy.exchangerate.ui.ExchangeRateApp
 import io.github.funnyphatguy.exchangerate.ui.theme.ExchangeRateTheme
 
 @AndroidEntryPoint
@@ -20,4 +20,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-

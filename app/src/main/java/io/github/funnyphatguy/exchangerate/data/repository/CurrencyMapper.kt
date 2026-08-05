@@ -5,6 +5,7 @@ import io.github.funnyphatguy.exchangerate.data.remote.model.CurrenciesResponse
 import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyDto
 import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
+import kotlinx.collections.immutable.toImmutableList
 
 object CurrencyMapper {
 
@@ -15,7 +16,7 @@ object CurrencyMapper {
             date = response.date,
             currencies = response.currencies.map(
                 CurrencyMapper::currencyDtoToDomain
-            ),
+            ).toImmutableList(),
         )
     }
 

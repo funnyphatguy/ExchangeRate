@@ -1,4 +1,4 @@
-package io.github.funnyphatguy.exchangerate.presentation.navigation
+package io.github.funnyphatguy.exchangerate.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -10,9 +10,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.github.funnyphatguy.exchangerate.presentation.about.AboutScreen
-import io.github.funnyphatguy.exchangerate.presentation.favorites.FavoritesScreen
-import io.github.funnyphatguy.exchangerate.presentation.rates.RatesScreen
+import io.github.funnyphatguy.exchangerate.ui.about.AboutScreen
+import io.github.funnyphatguy.exchangerate.ui.favorites.FavoritesScreen
+import io.github.funnyphatguy.exchangerate.ui.navigation.AppBottomBarDestination
+import io.github.funnyphatguy.exchangerate.ui.navigation.BottomNavigationBar
+import io.github.funnyphatguy.exchangerate.ui.rates.RatesScreen
 
 @Composable
 fun ExchangeRateApp() {

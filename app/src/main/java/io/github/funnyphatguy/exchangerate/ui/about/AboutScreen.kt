@@ -1,4 +1,4 @@
-package io.github.funnyphatguy.exchangerate.presentation.about
+package io.github.funnyphatguy.exchangerate.ui.about
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -78,7 +78,7 @@ fun AboutContent() {
             painter = painterResource(R.drawable.profile_photo),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(100.dp)
+                .size(200.dp)
                 .clip(
                     CircleShape
                 ),

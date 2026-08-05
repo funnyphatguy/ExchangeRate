@@ -1,10 +1,11 @@
-package io.github.funnyphatguy.exchangerate.presentation.favorites
+package io.github.funnyphatguy.exchangerate.ui.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
 import io.github.funnyphatguy.exchangerate.domain.repository.CurrencyRepository
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -22,12 +23,12 @@ class FavoritesViewModel @Inject constructor(
             FavoritesUiState.Empty
         } else {
             FavoritesUiState.Content(
-                favoriteCurrencies = favorites
+                favoriteCurrencies = favorites.toImmutableList()
             )
         }
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIME_MILLS),
+        started = SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIMEOUT_MILLS),
         initialValue = FavoritesUiState.Loading
     )
 
@@ -38,6 +39,6 @@ class FavoritesViewModel @Inject constructor(
     }
 
     private companion object {
-        const val STOP_TIME_MILLS = 5000L
+        const val STOP_TIMEOUT_MILLS = 5000L
     }
 }
