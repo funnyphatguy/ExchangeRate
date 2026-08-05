@@ -40,10 +40,7 @@ fun CurrencyCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor =
-                MaterialTheme.colorScheme.surfaceContainerLow
-        ),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
     ) {
         Row(
             modifier = Modifier
@@ -87,26 +84,22 @@ fun CurrencyCard(
                     onClick = { onFavoriteClick(currency) },
                 ) {
                     Icon(
-                        imageVector =
-                            if (isFavorite) {
+                        imageVector = if (isFavorite) {
                                 Icons.Filled.Favorite
                             } else {
                                 Icons.Outlined.FavoriteBorder
                             },
-                        contentDescription =
-                            if (isFavorite) {
+                        contentDescription = if (isFavorite) {
                                 "Удалить из избранного"
                             } else {
                                 "Добавить в избранное"
                             },
                         modifier = Modifier.size(24.dp),
-                        tint =
-                            if (isFavorite) {
+                        tint = if (isFavorite) {
                                 Color.Red
-                            } else {
-                                MaterialTheme.colorScheme
-                                    .onSurfaceVariant
-                            },
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
                     )
                 }
             }

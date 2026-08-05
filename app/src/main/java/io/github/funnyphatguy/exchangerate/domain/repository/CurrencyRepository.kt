@@ -1,12 +1,12 @@
 package io.github.funnyphatguy.exchangerate.domain.repository
 
-import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
+import io.github.funnyphatguy.exchangerate.domain.model.CurrencyRates
 import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepository {
 
-    suspend fun getCurrencies(): CurrenciesSnapshot
+    suspend fun getCurrencyRates(): CurrencyRates
 
     fun observeFavorites(): Flow<List<Currency>>
 

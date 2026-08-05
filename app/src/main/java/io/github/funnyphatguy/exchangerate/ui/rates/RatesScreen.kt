@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -16,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.funnyphatguy.exchangerate.common.withoutMillis
-import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
+import io.github.funnyphatguy.exchangerate.domain.model.CurrencyRates
 import io.github.funnyphatguy.exchangerate.ui.components.CurrencyCard
 import kotlinx.collections.immutable.ImmutableSet
 
@@ -35,6 +38,10 @@ fun RatesScreen(
     viewModel: RatesViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.init()
+    }
 
     RatesScreenContent(
         uiState = uiState,
@@ -47,14 +54,12 @@ fun RatesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RatesScreenContent(
-    uiState: RatesUiState,
+    uiState: RatesUiScreenState,
     onRefresh: () -> Unit,
     onFavoritePress: (Currency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isRefreshing =
-        uiState is RatesUiState.Success &&
-                uiState.isRefreshing
+    val isRefreshing = uiState is RatesUiScreenState.Success && uiState.isRefreshing
 
     PullToRefreshBox(
         isRefreshing = isRefreshing,
@@ -62,19 +67,19 @@ private fun RatesScreenContent(
         modifier = modifier.fillMaxSize(),
     ) {
         when (uiState) {
-            RatesUiState.Loading -> {
+            RatesUiScreenState.Loading -> {
                 LoadingContent()
             }
 
-            is RatesUiState.Error -> {
+            is RatesUiScreenState.Error -> {
                 ErrorContent(
                     message = uiState.errorMessage
                 )
             }
 
-            is RatesUiState.Success -> {
+            is RatesUiScreenState.Success -> {
                 RatesContent(
-                    snapshot = uiState.snapshot,
+                    currencyRates = uiState.currencyRates,
                     favorites = uiState.favorites,
                     lastLoadedTime = uiState.lastLoadedTime.withoutMillis(),
                     onFavoritePress = onFavoritePress
@@ -99,17 +104,26 @@ private fun LoadingContent(
 @Composable
 private fun ErrorContent(
     message: String,
+    modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        Text(text = message, textAlign = TextAlign.Center)
+        Text(
+            text = message,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
 @Composable
 private fun RatesContent(
-    snapshot: CurrenciesSnapshot,
+    currencyRates: CurrencyRates,
     favorites: ImmutableSet<String>,
     lastLoadedTime: String?,
     onFavoritePress: (Currency) -> Unit,
@@ -131,7 +145,7 @@ private fun RatesContent(
         )
 
         Text(
-            text = "Актуально на: ${snapshot.date} $lastLoadedTime",
+            text = "Актуально на: ${currencyRates.date} $lastLoadedTime",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
@@ -147,7 +161,7 @@ private fun RatesContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(
-                items = snapshot.currencies,
+                items = currencyRates.currencies,
                 key = { currency -> currency.code },
             ) { currency ->
                 CurrencyCard(
@@ -159,5 +173,3 @@ private fun RatesContent(
         }
     }
 }
-
-

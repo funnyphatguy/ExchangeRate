@@ -20,11 +20,9 @@ import io.github.funnyphatguy.exchangerate.ui.rates.RatesScreen
 fun ExchangeRateApp() {
     val navController = rememberNavController()
 
-    val backStackEntry by
-    navController.currentBackStackEntryAsState()
+    val backStackEntry by navController.currentBackStackEntryAsState()
 
-    val currentRoute =
-        backStackEntry?.destination?.route
+    val currentRoute = backStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {

@@ -7,8 +7,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import io.github.funnyphatguy.exchangerate.data.local.AppDatabase
-import io.github.funnyphatguy.exchangerate.data.local.CurrencyDao
+import io.github.funnyphatguy.exchangerate.data.database.AppDatabase
+import io.github.funnyphatguy.exchangerate.data.database.CurrencyDao
 import javax.inject.Singleton
 
 

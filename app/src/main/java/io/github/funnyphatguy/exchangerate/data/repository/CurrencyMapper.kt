@@ -1,27 +1,27 @@
 package io.github.funnyphatguy.exchangerate.data.repository
 
-import io.github.funnyphatguy.exchangerate.data.local.CurrencyDb
-import io.github.funnyphatguy.exchangerate.data.remote.model.CurrenciesResponse
-import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyDto
-import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
+import io.github.funnyphatguy.exchangerate.data.database.CurrencyEntity
+import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyRatesResponse
+import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyResponse
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
+import io.github.funnyphatguy.exchangerate.domain.model.CurrencyRates
 import kotlinx.collections.immutable.toImmutableList
 
 object CurrencyMapper {
 
-    fun currenciesDtoToDomain(
-        response: CurrenciesResponse,
-    ): CurrenciesSnapshot {
-        return CurrenciesSnapshot(
+    fun currencyRatesResponseToCurrencyRates(
+        response: CurrencyRatesResponse,
+    ): CurrencyRates {
+        return CurrencyRates(
             date = response.date,
             currencies = response.currencies.map(
-                CurrencyMapper::currencyDtoToDomain
+                CurrencyMapper::currencyResponseToCurrency
             ).toImmutableList(),
         )
     }
 
-    private fun currencyDtoToDomain(
-        currency: CurrencyDto,
+    private fun currencyResponseToCurrency(
+        currency: CurrencyResponse,
     ): Currency {
         return Currency(
             code = currency.charCode,
@@ -30,18 +30,18 @@ object CurrencyMapper {
         )
     }
 
-    fun currencyDomainToDb(
+    fun currencyToEntity(
         currency: Currency,
-    ): CurrencyDb {
-        return CurrencyDb(
+    ): CurrencyEntity {
+        return CurrencyEntity(
             code = currency.code,
             name = currency.name,
             rateInRubles = currency.rateInRubles.toString(),
         )
     }
 
-    fun currencyDbToDomain(
-        currency: CurrencyDb,
+    fun currencyEntityToCurrency(
+        currency: CurrencyEntity,
     ): Currency {
         return Currency(
             code = currency.code,

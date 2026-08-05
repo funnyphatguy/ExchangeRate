@@ -1,7 +1,7 @@
 package io.github.funnyphatguy.exchangerate.data.remote
 
-import io.github.funnyphatguy.exchangerate.data.remote.model.CurrenciesResponse
-import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyDto
+import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyRatesResponse
+import io.github.funnyphatguy.exchangerate.data.remote.model.CurrencyResponse
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class RatesXmlParser @Inject constructor() {
 
-    private fun readCurrency(parser: XmlPullParser): CurrencyDto {
+    private fun readCurrency(parser: XmlPullParser): CurrencyResponse {
         val id = requireNotNull(parser.getAttributeValue(null, "ID"))
         var numCode: String? = null
         var charCode: String? = null
@@ -41,7 +41,7 @@ class RatesXmlParser @Inject constructor() {
             }
             eventType = parser.next()
         }
-        return CurrencyDto(
+        return CurrencyResponse(
             id = id,
             numCode = requireNotNull(numCode),
             charCode = requireNotNull(charCode),
@@ -52,13 +52,13 @@ class RatesXmlParser @Inject constructor() {
         )
     }
 
-    fun parse(inputStream: InputStream): CurrenciesResponse {
+    fun parse(inputStream: InputStream): CurrencyRatesResponse {
         val parser = XmlPullParserFactory.newInstance().newPullParser()
         parser.setInput(inputStream, null)
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         var date: LocalDate? = null
-        val currencies = mutableListOf<CurrencyDto>()
+        val currencies = mutableListOf<CurrencyResponse>()
 
         var eventType = parser.eventType
         while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -76,7 +76,7 @@ class RatesXmlParser @Inject constructor() {
 
             eventType = parser.next()
         }
-        return CurrenciesResponse(
+        return CurrencyRatesResponse(
             date = requireNotNull(date),
             currencies = currencies
         )

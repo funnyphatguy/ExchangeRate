@@ -10,11 +10,13 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class RatesViewModel @Inject constructor(
@@ -25,12 +27,11 @@ class RatesViewModel @Inject constructor(
 
     private var favoriteCodes: ImmutableSet<String> = persistentSetOf()
 
-    private val _uiState: MutableStateFlow<RatesUiState> =
-        MutableStateFlow(RatesUiState.Loading)
+    private val _uiState: MutableStateFlow<RatesUiScreenState> = MutableStateFlow(RatesUiScreenState.Loading)
 
-    val uiState: StateFlow<RatesUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<RatesUiScreenState> = _uiState.asStateFlow()
 
-    init {
+    fun init(){
         observeFavorites()
         loadRates()
     }
@@ -42,7 +43,7 @@ class RatesViewModel @Inject constructor(
 
                 val currentState = _uiState.value
 
-                if (currentState is RatesUiState.Success) {
+                if (currentState is RatesUiScreenState.Success) {
                     _uiState.value = currentState.copy(favorites = favoriteCodes)
                 }
             }
@@ -53,6 +54,7 @@ class RatesViewModel @Inject constructor(
         val isFavorite = currency.code in favoriteCodes
 
         viewModelScope.launch {
+            delay(200L.milliseconds)
             if (isFavorite) {
                 repository.removeFavorite(currency.code)
             } else {
@@ -70,24 +72,24 @@ class RatesViewModel @Inject constructor(
 
        loadJob =  viewModelScope.launch {
             _uiState.value =
-                if (currentState is RatesUiState.Success) {
+                if (currentState is RatesUiScreenState.Success) {
                     currentState.copy(isRefreshing = true)
                 } else {
-                    RatesUiState.Loading
+                    RatesUiScreenState.Loading
                 }
 
             try {
-                val result = repository.getCurrencies()
+                val result = repository.getCurrencyRates()
 
-                _uiState.value = RatesUiState.Success(
-                    snapshot = result,
+                _uiState.value = RatesUiScreenState.Success(
+                    currencyRates = result,
                     isRefreshing = false,
                     favorites = favoriteCodes
                 )
             } catch (exception: CancellationException) {
                 throw exception
             } catch (exception: Exception) {
-                _uiState.value = RatesUiState.Error(
+                _uiState.value = RatesUiScreenState.Error(
                     errorMessage = "Не удалось загрузить курсы валют"
                 )
             } finally {
