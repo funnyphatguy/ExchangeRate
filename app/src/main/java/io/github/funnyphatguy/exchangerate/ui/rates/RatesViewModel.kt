@@ -1,10 +1,13 @@
-package io.github.funnyphatguy.exchangerate.presentation.rates
+package io.github.funnyphatguy.exchangerate.ui.rates
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
 import io.github.funnyphatguy.exchangerate.domain.repository.CurrencyRepository
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +23,7 @@ class RatesViewModel @Inject constructor(
 
    private var loadJob: Job? = null
 
-    private var favoriteCodes: Set<String> = emptySet()
+    private var favoriteCodes: ImmutableSet<String> = persistentSetOf()
 
     private val _uiState: MutableStateFlow<RatesUiState> =
         MutableStateFlow(RatesUiState.Loading)
@@ -32,11 +35,10 @@ class RatesViewModel @Inject constructor(
         loadRates()
     }
 
-
     private fun observeFavorites() {
         viewModelScope.launch {
             repository.observeFavorites().collect { favorites ->
-                favoriteCodes = favorites.map { currency -> currency.code }.toSet()
+                favoriteCodes = favorites.map { currency -> currency.code }.toImmutableSet()
 
                 val currentState = _uiState.value
 

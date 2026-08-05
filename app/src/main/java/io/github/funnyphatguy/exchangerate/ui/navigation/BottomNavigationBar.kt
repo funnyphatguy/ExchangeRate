@@ -1,4 +1,4 @@
-package io.github.funnyphatguy.exchangerate.presentation.navigation
+package io.github.funnyphatguy.exchangerate.ui.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.HorizontalDivider
@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 
 @Composable
@@ -26,6 +27,7 @@ fun BottomNavigationBar(
             containerColor = MaterialTheme.colorScheme.surface,
         ) {
             AppBottomBarDestination.entries.forEach { destination ->
+                val label = stringResource(id = destination.labelResId)
                 NavigationBarItem(
                     selected = currentRoute == destination.route,
                     onClick = {
@@ -34,12 +36,12 @@ fun BottomNavigationBar(
                     icon = {
                         Icon(
                             imageVector = destination.icon,
-                            contentDescription = destination.label
+                            contentDescription = label
                         )
                     },
                     label = {
                         Text(
-                            text = destination.label,
+                            text = label,
                             fontSize = 14.sp,
                         )
                     },

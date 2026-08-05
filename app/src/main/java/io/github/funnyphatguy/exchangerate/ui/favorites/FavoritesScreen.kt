@@ -1,4 +1,4 @@
-package io.github.funnyphatguy.exchangerate.presentation.favorites
+package io.github.funnyphatguy.exchangerate.ui.favorites
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +28,7 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
 import io.github.funnyphatguy.exchangerate.ui.components.CurrencyCard
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 
 @Composable
 fun FavoritesScreen(
@@ -138,13 +141,13 @@ private fun FavoriteCurrencyCard(
 ) {
     val dismissState = rememberSwipeToDismissBoxState()
 
-    LaunchedEffect(dismissState.settledValue) {
-        if (
-            dismissState.settledValue ==
-            SwipeToDismissBoxValue.EndToStart
-        ) {
-            onRemove(currency)
+    LaunchedEffect(dismissState) {
+        snapshotFlow {
+            dismissState.settledValue
         }
+            .distinctUntilChanged()
+            .filter { value -> value == SwipeToDismissBoxValue.EndToStart }
+            .collect { onRemove(currency) }
     }
 
     SwipeToDismissBox(

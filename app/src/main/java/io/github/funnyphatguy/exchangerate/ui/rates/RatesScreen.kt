@@ -1,4 +1,4 @@
-package io.github.funnyphatguy.exchangerate.presentation.rates
+package io.github.funnyphatguy.exchangerate.ui.rates
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +27,7 @@ import io.github.funnyphatguy.exchangerate.common.withoutMillis
 import io.github.funnyphatguy.exchangerate.domain.model.CurrenciesSnapshot
 import io.github.funnyphatguy.exchangerate.domain.model.Currency
 import io.github.funnyphatguy.exchangerate.ui.components.CurrencyCard
+import kotlinx.collections.immutable.ImmutableSet
 
 @Composable
 fun RatesScreen(
@@ -99,13 +100,17 @@ private fun LoadingContent(
 private fun ErrorContent(
     message: String,
 ) {
-    Text(text = message, textAlign = TextAlign.Center)
+    Box(
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+    ) {
+        Text(text = message, textAlign = TextAlign.Center)
+    }
 }
 
 @Composable
 private fun RatesContent(
     snapshot: CurrenciesSnapshot,
-    favorites: Set<String>,
+    favorites: ImmutableSet<String>,
     lastLoadedTime: String?,
     onFavoritePress: (Currency) -> Unit,
     modifier: Modifier = Modifier,
@@ -154,6 +159,5 @@ private fun RatesContent(
         }
     }
 }
-
 
 

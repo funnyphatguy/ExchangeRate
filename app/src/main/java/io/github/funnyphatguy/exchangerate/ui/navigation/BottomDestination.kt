@@ -1,32 +1,33 @@
-package io.github.funnyphatguy.exchangerate.presentation.navigation
+package io.github.funnyphatguy.exchangerate.ui.navigation
 
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
+import io.github.funnyphatguy.exchangerate.R
 
 enum class AppBottomBarDestination(
     val route: String,
-    val label: String,
+    @StringRes val labelResId: Int,
     val icon: ImageVector,
 ) {
     RATES(
         route = "rates",
-        label = "Курсы",
+        labelResId = R.string.bottom_navigation_rates,
         icon = Icons.Default.AttachMoney
     ),
 
     FAVORITES(
         route = "favorites",
-        label = "Избранное",
+        labelResId = R.string.bottom_navigation_favorites,
         icon = Icons.Default.Star
     ),
 
     ABOUT(
         route = "about",
-        label = "О себе",
+        labelResId = R.string.bottom_navigation_about,
         icon = Icons.Default.Person
     )
 }

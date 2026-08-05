@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ExchangeRate</string>
+
+    <string name="bottom_navigation_rates">Курсы</string>
+    <string name="bottom_navigation_favorites">Избранное</string>
+    <string name="bottom_navigation_about">О себе</string>
 </resources>
