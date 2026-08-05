@@ -7,6 +7,7 @@ sealed interface RatesUiState {
     data object Loading : RatesUiState
     data class Success(
         val snapshot: CurrenciesSnapshot,
+        val favorites: Set<String> = emptySet(),
         val isRefreshing: Boolean = false,
         val lastLoadedTime: LocalTime = LocalTime.now()
     ) : RatesUiState

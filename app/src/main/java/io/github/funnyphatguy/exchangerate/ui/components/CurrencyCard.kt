@@ -33,7 +33,7 @@ import java.math.RoundingMode
 fun CurrencyCard(
     currency: Currency,
     isFavorite: Boolean,
-    onFavoriteClick: () -> Unit,
+    onFavoriteClick: (Currency) -> Unit,
     modifier: Modifier = Modifier,
     showFavoriteIcon: Boolean = true,
 ) {
@@ -84,7 +84,7 @@ fun CurrencyCard(
 
             if (showFavoriteIcon) {
                 IconButton(
-                    onClick = onFavoriteClick,
+                    onClick = { onFavoriteClick(currency) },
                 ) {
                     Icon(
                         imageVector =
