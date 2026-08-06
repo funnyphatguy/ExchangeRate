@@ -40,7 +40,7 @@ fun RatesScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.init()
+        viewModel.loadRates()
     }
 
     RatesScreenContent(
@@ -54,34 +54,32 @@ fun RatesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RatesScreenContent(
-    uiState: RatesUiScreenState,
+    uiState: RatesUiState,
     onRefresh: () -> Unit,
     onFavoritePress: (Currency) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isRefreshing = uiState is RatesUiScreenState.Success && uiState.isRefreshing
-
     PullToRefreshBox(
-        isRefreshing = isRefreshing,
+        isRefreshing = uiState.isRefreshing,
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize(),
     ) {
-        when (uiState) {
+        when (val screenState = uiState.screenState) {
             RatesUiScreenState.Loading -> {
                 LoadingContent()
             }
 
             is RatesUiScreenState.Error -> {
                 ErrorContent(
-                    message = uiState.errorMessage
+                    message = screenState.errorMessage
                 )
             }
 
             is RatesUiScreenState.Success -> {
                 RatesContent(
-                    currencyRates = uiState.currencyRates,
+                    currencyRates = screenState.currencyRates,
                     favorites = uiState.favorites,
-                    lastLoadedTime = uiState.lastLoadedTime.withoutMillis(),
+                    lastLoadedTime = uiState.lastLoadedTime?.withoutMillis(),
                     onFavoritePress = onFavoritePress
                 )
             }

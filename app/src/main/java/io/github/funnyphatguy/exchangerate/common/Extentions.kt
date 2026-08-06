@@ -8,5 +8,5 @@ private const val TIME_PATTERN = "HH:mm"
 
 fun LocalTime.withoutMillis(): String = runCatching {
     val outputFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN, Locale.getDefault())
-        format(outputFormatter)
+    format(outputFormatter)
 }.getOrNull() ?: "N/A"
